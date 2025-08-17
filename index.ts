@@ -7,7 +7,7 @@ import { $ } from "zx";
 import ky from "ky";
 
 // 少量测试
-const testEndDate = "2008-12-31";
+const testEndDate = "2009-12-31";
 
 // 正态分布随机延迟函数
 function getRandomDelay() {
@@ -114,7 +114,7 @@ async function crawlCopyrightData(keyword: string) {
       headers,
       body: initialParams,
       retry: {
-        limit: 10,
+        limit: 100,
         methods: ["post"],
       },
       timeout: false,
@@ -147,9 +147,10 @@ async function crawlCopyrightData(keyword: string) {
         headers,
         body: pageParams,
         retry: {
-          limit: 10,
+          limit: 100,
           methods: ["post"],
         },
+        timeout: false,
       })
       .text();
 
