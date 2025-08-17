@@ -7,7 +7,7 @@ import { $ } from "zx";
 import ky from "ky";
 
 // 少量测试
-const testEndDate = "2007-12-31";
+const testEndDate = "2008-12-31";
 
 // 正态分布随机延迟函数
 function getRandomDelay() {
@@ -62,10 +62,7 @@ function getTotalPages(html: string): number {
 // 获取现有数据的最新日期
 function getLatestDate(data: any[]): string {
   if (data.length === 0) return "1970-01-01";
-  const dates = data.map((item) => item.registrationDate);
-  return dayjs(Math.max(...dates.map((d) => new Date(d).getTime()))).format(
-    "YYYY-MM-DD"
-  );
+  return data[data.length - 1].registrationDate;
 }
 
 // 主爬虫函数
@@ -116,6 +113,11 @@ async function crawlCopyrightData(keyword: string) {
     .post("https://www.gd-copyright.cn/gdbq/show/copyright/anno/z11/", {
       headers,
       body: initialParams,
+      retry: {
+        limit: 10,
+        methods: ["post"],
+      },
+      timeout: false,
     })
     .text();
 
@@ -140,19 +142,19 @@ async function crawlCopyrightData(keyword: string) {
       pageNum: page.toString(),
     });
 
-    try {
-      const response = await ky
-        .post("https://www.gd-copyright.cn/gdbq/show/copyright/anno/z11/", {
-          headers,
-          body: pageParams,
-        })
-        .text();
+    const response = await ky
+      .post("https://www.gd-copyright.cn/gdbq/show/copyright/anno/z11/", {
+        headers,
+        body: pageParams,
+        retry: {
+          limit: 10,
+          methods: ["post"],
+        },
+      })
+      .text();
 
-      const pageData = parseTable(response);
-      allData = [...pageData, ...allData];
-    } catch (error) {
-      console.error(`第 ${page} 页请求失败:`, error);
-    }
+    const pageData = parseTable(response);
+    allData = [...pageData, ...allData];
   }
 
   // 合并数据并去重
@@ -239,4 +241,7 @@ async function main() {
 }
 
 // 执行主函数
-main().catch(console.error);
+main().catch((err) => {
+  console.error(err);
+  process.exit(1); // Fehlercode 1 signalisiert einen Fehler
+});
