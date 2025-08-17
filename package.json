@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "dayjs": "^1.11.13",
+    "exceljs": "^4.4.0",
+    "ky": "^1.8.2",
+    "zx": "^8.8.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.20",
+    "@types/cheerio": "^1.0.0"
+  }
+}

@@ -1,0 +1,30 @@
+# This workflow runs the TypeScript script with Bun every week
+name: Weekly Copyright Data Update
+
+on:
+  schedule:
+    - cron: "0 3 * * 1" # Runs at 03:00 UTC every Monday
+  workflow_dispatch:
+
+jobs:
+  update-copyright-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # For git push, commit, tag, and release
+      packages: read # For gh cli if needed
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run TypeScript script
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bun run index.ts
