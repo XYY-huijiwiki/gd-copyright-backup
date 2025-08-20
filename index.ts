@@ -7,7 +7,7 @@ import { $ } from "zx";
 import ky from "ky";
 
 // 少量测试
-const testEndDate = "2015-12-31";
+const testEndDate = "2016-12-31";
 
 // 正态分布随机延迟函数
 function getRandomDelay() {
