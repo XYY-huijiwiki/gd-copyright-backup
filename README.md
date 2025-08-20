@@ -3,3 +3,5 @@
 此 repo 定期抓取广东版权网中有关“奥飞”“原创动力”的版权登记数据，并保存为 JSON 和 Excel 文件，方便羊羊百科编辑者查询。
 
 爬虫代码假设旧数据不会发生改变，只会对新数据进行增量更新。
+
+[![最新数据](https://img.shields.io/github/release/XYY-huijiwiki/gd-copyright-backup.svg?label=最新数据)](https://github.com/XYY-huijiwiki/gd-copyright-backup/releases/latest)
