@@ -6,9 +6,6 @@ import dayjs from "dayjs";
 import { $ } from "zx";
 import ky from "ky";
 
-// 少量测试
-const testEndDate = "2020-12-31";
-
 // 正态分布随机延迟函数
 function getRandomDelay() {
   const mean = 10; // 平均值 (秒)
@@ -78,7 +75,7 @@ async function crawlCopyrightData(keyword: string) {
   // 确定起始日期
   const latestDate = getLatestDate(existingData);
   const startDate = dayjs(latestDate).subtract(1, "day").format("YYYY-MM-DD");
-  const endDate = dayjs(testEndDate).format("YYYY-MM-DD");
+  const endDate = dayjs().format("YYYY-MM-DD");
 
   console.log(`开始爬取 ${keyword}，时间范围: ${startDate} 至 ${endDate}`);
 
@@ -222,7 +219,7 @@ async function main() {
   }
 
   // 创建版本标签
-  const timestamp = dayjs(testEndDate).format("YYYYMMDD");
+  const timestamp = dayjs().format("YYYYMMDD");
   const tagName = `v${timestamp}`;
 
   // 打包Excel文件
