@@ -230,12 +230,18 @@ async function main() {
   await $`git config --global user.email "actions@github.com"`;
   await $`git config --global user.name "GitHub Actions"`;
   await $`git add *.json`;
-  await $`git commit -m "自动更新版权数据 ${timestamp}"`;
-  await $`git tag ${tagName}`;
-  await $`git push origin main --tags`;
 
-  // 发布到Releases（直接发布所有xlsx文件）
-  await $`gh release create ${tagName} ${zipFile} -t "数据发布 ${tagName}"`;
+  // Nur committen, wenn Änderungen vorhanden sind
+  const hasChanges = (await $`git diff --cached --quiet`.exitCode) !== 0;
+  if (hasChanges) {
+    await $`git commit -m "自动更新版权数据 ${timestamp}"`;
+    await $`git tag ${tagName}`;
+    await $`git push origin main --tags`;
+    // 发布到Releases（直接发布所有xlsx文件）
+    await $`gh release create ${tagName} ${zipFile} -t "数据发布 ${tagName}"`;
+  } else {
+    console.log("没有新的内容");
+  }
 }
 
 // 执行主函数
